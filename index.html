@@ -152,6 +152,70 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-滑动窗口" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/06/04/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/">滑动窗口</a>
+    </h1>
+  
+
+        
+        <a href="/2022/06/04/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" class="archive-article-date">
+  	<time datetime="2022-06-04T14:26:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##滑动窗口<br>content：<br><strong>代码</strong><br>#include <iostream><br>using namespace std;<br>const int N = 1e6 + 10;<br>int q[N],a[N];</p>
+<p>int main(){<br>    int n,k;<br>    scanf(“%d %d”, &amp;n,&amp;k);<br>    for(int i = 0;i &lt; n;i++)scanf(“%d “,&amp;a[i]);<br>    int hh = 0, tt = -1;//设定hh为队头，设定tt为队尾。<br>    for(int i = 0; i &lt; n; i++){<br>        if(hh &lt;= tt &amp;&amp; i - k + 1 &gt; q[hh])hh++;//q[hh]表示滑动窗口的队头，如果发现i后面第k个的标志大于q[hh],说明q[hh]已经已经脱离窗口，所以hh++，使其往前一位。注意，i- k + 1表示的是当前队头应该在的位置，只有当q[hh]小于它时才算出“头”，所以条件应该是i - k + 1 &lt; q[hh]。<br>        while(hh &lt;= tt &amp;&amp; a[q[tt]] &gt;= a[i])tt–;//q[tt]表示队尾，如果i中新进的值小于q[tt]中的值，则表示最小值不会取到a[q[tt],可以将q[tt]推出，直到q[tt]中的值小于或等于i中的值。<br>        q[++tt] = i;//将i入队<br>        if(i &gt;= k - 1)printf(“%d “,a[q[hh]]);//输出q[hh]中的值，即输出队头的值，队头的值在经过出入队列的操作后是最小的。注意，输出最小值的条件是，当i已经达到满足k这么长的区间边界的时候才开始输出最小值，没有到这么长的时候不输出。<br>    }<br>    puts(“”);<br>    hh = 0, tt = -1;<br>    for(int i = 0; i &lt; n; i++){<br>        if(hh &lt;= tt &amp;&amp; i - k + 1 &gt; q[hh])hh++;<br>        while(hh &lt;= tt &amp;&amp; a[q[tt]] &lt;= a[i])tt–;//求最大换比较条件，将队头排成最大的。<br>        q[++tt] = i;<br>        if(i &gt;= k - 1)printf(“%d “,a[q[hh]]);<br>    }<br>    puts(“”);<br>}<br><em>分割线————————————————————</em><br>  滑动窗口本身的暴力做法是通过两重循环不断地对当前窗口内的数值进行比较，而其时间复杂度在这样的循环下不可避免的会成为O(n^2)，为了降低时间复杂度，我们套用双针针算法的思想寻找相关的规律，减少内部循环次数。<br>  我们发现，在求最大最小值的情况下，我们能够将队列的内部不断有序化，即<strong>剔除掉队列中的那些在i入队后比i所含的值还要大的值</strong>直到i的值不再小于队列内所含的元素。能这么的原因是：<br>  首先，先极端一点，如果队列在滑动过程中进入队列的某个值是当前队列里在它未出队列时将不断保持最小的值,那么之后其他值的入队就变得毫无意义，因为在它未出队列的情况下，一切入队的值都小于它，那么我们所输出的都只是这个最小值。这就给我们将滑动的队列进行有序化提供了依据。<br>  其次，在普通的情况下，这个最小值是会不断变化的，所以，我们就只能进行不断的有序化，将入队的元素在进队时就已经到了它应该到的位置。我们将比现在入队的值小于或等于的值都出队，因为比它更大的值已经被出队了，现在队列中剩下的元素都将小于或等于这个入队的数，所以，队头必定是最小的那个数。<br>  最后，我们发现，经历了这样的出入队操作后，当前的滑动队列已经变得有序了，而且，窗口的最前端必定是最小的那个数。当一个值入队，经过操作，当我们要寻找最小值时，就只用输出出该队列的最前端，避免了每次的暴力的查找。这样优化下来的时间复杂度，就只是O(C*n)（C是常数）= O(n)。<br>小结：<br>  滑动窗口很主要的思想就是利用双指针的思想对暴力算法进行优化，通过暴力算法完成我们的优化，有序化，是一个很重要的思想，求某些隐含了顺序的问题，可以尝试使用这样的思路。对于代码的实现，需要注意循环条件的边界问题。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/06/04/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-快速排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
